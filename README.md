@@ -19,7 +19,7 @@ The plugin receives a config file with:
  * %time - current date time
  * %level - message level
  * %pid - process id
- * %msg - message
+ * %msg - message to log
 
 # How to use it
 
