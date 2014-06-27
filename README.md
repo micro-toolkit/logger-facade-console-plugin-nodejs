@@ -15,7 +15,7 @@ The plugin receives a config file with:
 **Level:** The level configuration active for this pluggin.
 
 **Format:** The message format to log, the message information can use util.format parameters.
- * %name - name of current logger instance
+ * %logger - name of current logger instance
  * %time - current date time
  * %level - message level
  * %pid - process id
@@ -26,6 +26,7 @@ The plugin receives a config file with:
 Install it:
 
 ```
+npm install logger-facade-nodejs
 npm install logger-facade-console-plugin-nodejs
 ```
 
@@ -35,6 +36,7 @@ Set up plugins and log
 var Logger = require('logger-facade-nodejs');
 var LoggerConsolePlugin = require('logger-facade-console-plugin-nodejs');
 
+// this is the default config
 var config = {
   format: '%time | %name::%level | PID: %pid - %msg',
   level: 'debug'
