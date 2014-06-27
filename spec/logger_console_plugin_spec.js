@@ -240,4 +240,23 @@ describe('Logger Console Plugin', function(){
 
   });
 
+  describe('#isDebug',function(){
+
+    it('returns true when level in trace',function() {
+      plugin.level = 'trace';
+      expect(plugin.isDebug()).toEqual(true);
+    });
+
+    it('returns true when level in debug',function() {
+      plugin.level = 'debug';
+      expect(plugin.isDebug()).toEqual(true);
+    });
+
+    it('returns false when level not in trace or debug',function(){
+      plugin.level = 'info';
+      expect(plugin.isDebug()).toEqual(false);
+    });
+
+  });
+
 });

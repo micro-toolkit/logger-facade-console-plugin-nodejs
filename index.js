@@ -65,6 +65,12 @@
 
     this.level = config.level;
 
+    this.name = 'LoggerConsolePlugin';
+
+    this.isDebug = function(){
+      return isLevelActive('debug');
+    }.bind(this);
+
     this.debug = function(){
       log('debug', arguments);
     }.bind(this);
