@@ -14,7 +14,9 @@ The plugin receives a config file with:
 
 **Level:** The level configuration active for this pluggin.
 
-**Format:** The message format to log, the message information can use util.format parameters.
+**Time Format:** The time format using [moment.js](momentjs.com) formats.
+
+**Message Format:** The message format to log, the message information can use util.format parameters.
  * %logger - name of current logger instance
  * %time - current date time
  * %level - message level
@@ -38,15 +40,37 @@ var LoggerConsolePlugin = require('logger-facade-console-plugin-nodejs');
 
 // this is the default config
 var config = {
-  format: '%time | %name::%level | PID: %pid - %msg',
-  level: 'debug'
+  level: 'debug',
+  timeFormat: 'YYYY-MM-DD HH:mm:ss',
+  messageFormat: '%time | %logger::%level - %msg'
 };
+
+console.log("Start sample of Async Log...");
+
 var plugin = new LoggerConsolePlugin(config);
 Logger.use(plugin);
 
-var log = new Logger("Name");
-log.debug("message to log %s", 'with args');
+console.log("Plugins: ", Logger.plugins());
+
+var log = Logger.getLogger("Name");
+log.trace("Message to log %s and should be hide", 'with args');
+log.debug("Message to log %s", 'with args');
+log.info("Message to log %s", 'with args');
+log.warn("Message to log %s", 'with args');
+log.error("Message to log %s", 'with args');
+
+console.log("End sample...");
+
+process.nextTick(function(){
+  console.log("Start sample of Async Log and delay execution...");
+  log.info("Message to log %s", 'with args');
+  process.nextTick(function(){
+    console.log("End sample of delayed execution!");
+  });
+});
 ```
+
+Download the code from this [gist](https://gist.github.com/pjanuario/c5889fc5f9160fab0d0b).
 
 # Contributing
 Bug fixes and new features are of course very welcome!
