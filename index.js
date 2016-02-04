@@ -1,5 +1,6 @@
 var _ = require('lodash'),
-    moment = require('moment');
+    moment = require('moment'),
+    isLevelActive = require('./level');
 
 var LoggerConsolePlugin = function(configuration) {
   var defaults = {
@@ -10,22 +11,6 @@ var LoggerConsolePlugin = function(configuration) {
 
   var config = _.defaults(configuration || {}, defaults);
   //moment.utc().format('YYYY-MM-DD HH:mm:ss')
-
-  var levels = {
-    trace: 0,
-    debug: 1,
-    info:  2,
-    warn:  3,
-    error: 4
-  };
-
-  var isLevelActive = function(logLevel){
-
-    var activeLevel = levels[this.level.toLowerCase()];
-    var level = levels[logLevel];
-    return activeLevel <= level;
-
-  }.bind(this);
 
   var getMessage = function(logger, level, msg){
     var now = moment.utc().format(this.config.timeFormat);
@@ -44,7 +29,7 @@ var LoggerConsolePlugin = function(configuration) {
 
   var log = function(level, args){
 
-    if(isLevelActive(level)) {
+    if (isLevelActive(level, this.level)) {
       args = _.toArray(args);
 
       var logger = args.shift();
@@ -66,7 +51,7 @@ var LoggerConsolePlugin = function(configuration) {
   this.name = 'LoggerConsolePlugin';
 
   this.isDebug = function(){
-    return isLevelActive('debug');
+    return isLevelActive('debug', this.level);
   }.bind(this);
 
   this.debug = function(){
