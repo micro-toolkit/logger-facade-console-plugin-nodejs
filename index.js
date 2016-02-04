@@ -1,28 +1,9 @@
-var _ = require('lodash'),
-    moment = require('moment'),
-    isLevelActive = require('./level'),
+var isLevelActive = require('./level'),
     getConfig = require('./config'),
-    format = require('./format');
+    log = require('./log');
 
 var LoggerConsolePlugin = function(configuration) {
   var config = getConfig(configuration);
-
-  var log = function(level, args){
-
-    if (isLevelActive(level, this.level)) {
-      args = _.toArray(args);
-
-      var logger = args.shift();
-      var msg = args.shift();
-
-      var output = format.text(this.config, logger, level, msg);
-
-      args.unshift(output);
-
-      console.log.apply(console, args);
-    }
-
-  }.bind(this);
 
   this.config = config;
 
@@ -35,23 +16,23 @@ var LoggerConsolePlugin = function(configuration) {
   }.bind(this);
 
   this.debug = function(){
-    log('debug', arguments);
+    log(this.config, this.level, 'debug', arguments);
   }.bind(this);
 
   this.trace = function(){
-    log('trace', arguments);
+    log(this.config, this.level, 'trace', arguments);
   }.bind(this);
 
   this.info = function(){
-    log('info', arguments);
+    log(this.config, this.level, 'info', arguments);
   }.bind(this);
 
   this.warn = function(){
-    log('warn', arguments);
+    log(this.config, this.level, 'warn', arguments);
   }.bind(this);
 
   this.error = function(){
-    log('error', arguments);
+    log(this.config, this.level, 'error', arguments);
   }.bind(this);
 };
 
