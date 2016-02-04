@@ -10,7 +10,6 @@ var LoggerConsolePlugin = function(configuration) {
   };
 
   var config = _.defaults(configuration || {}, defaults);
-  //moment.utc().format('YYYY-MM-DD HH:mm:ss')
 
   var getMessage = function(logger, level, msg){
     var now = moment.utc().format(this.config.timeFormat);
