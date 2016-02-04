@@ -1,25 +1,11 @@
 var _ = require('lodash'),
     moment = require('moment'),
     isLevelActive = require('./level'),
-    getConfig = require('./config');
+    getConfig = require('./config'),
+    format = require('./format');
 
 var LoggerConsolePlugin = function(configuration) {
   var config = getConfig(configuration);
-
-  var getMessage = function(logger, level, msg){
-    var now = moment.utc().format(this.config.timeFormat);
-
-    var outputMsg = msg instanceof Error ? msg.stack : msg;
-
-		var formatedMessage = this.config.messageFormat
-			.replace('%logger', logger.toUpperCase())
-			.replace('%time', now)
-			.replace('%level', level.toUpperCase())
-			.replace('%pid', process.pid)
-			.replace('%msg', outputMsg);
-
-    return formatedMessage;
-  }.bind(this);
 
   var log = function(level, args){
 
@@ -29,7 +15,7 @@ var LoggerConsolePlugin = function(configuration) {
       var logger = args.shift();
       var msg = args.shift();
 
-      var output = getMessage(logger, level, msg);
+      var output = format.text(this.config, logger, level, msg);
 
       args.unshift(output);
 
