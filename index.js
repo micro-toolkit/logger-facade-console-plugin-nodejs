@@ -1,15 +1,10 @@
 var _ = require('lodash'),
     moment = require('moment'),
-    isLevelActive = require('./level');
+    isLevelActive = require('./level'),
+    getConfig = require('./config');
 
 var LoggerConsolePlugin = function(configuration) {
-  var defaults = {
-    level: 'debug',
-    timeFormat: 'YYYY-MM-DD HH:mm:ss',
-    messageFormat: '%time | %logger::%level | PID: %pid - %msg'
-  };
-
-  var config = _.defaults(configuration || {}, defaults);
+  var config = getConfig(configuration);
 
   var getMessage = function(logger, level, msg){
     var now = moment.utc().format(this.config.timeFormat);
