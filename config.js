@@ -3,7 +3,8 @@ var _ = require('lodash');
 var defaults = {
   level: 'debug',
   timeFormat: 'YYYY-MM-DD HH:mm:ss',
-  messageFormat: '%time | %logger::%level | PID: %pid - %msg'
+  messageFormat: '%time | %logger::%level | PID: %pid - %msg',
+  json: false
 };
 
 function getConfig(configuration){
