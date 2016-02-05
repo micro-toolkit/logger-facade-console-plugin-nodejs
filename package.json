@@ -33,7 +33,7 @@
     "grunt-jasmine-node-coverage-validation": "0.0.4"
   },
   "dependencies": {
-    "lodash": "^2.4.1",
+    "lodash": "^4.2.1",
     "moment": "^2.7.0"
   }
 }
