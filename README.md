@@ -32,7 +32,7 @@ npm install logger-facade-nodejs
 npm install logger-facade-console-plugin-nodejs
 ```
 
-Set up plugins and log
+Set up plugins and log in a human readable format
 
 ```javascript
 var Logger = require('logger-facade-nodejs');
@@ -42,7 +42,8 @@ var LoggerConsolePlugin = require('logger-facade-console-plugin-nodejs');
 var config = {
   level: 'debug',
   timeFormat: 'YYYY-MM-DD HH:mm:ss',
-  messageFormat: '%time | %logger::%level - %msg'
+  messageFormat: '%time | %logger::%level - %msg',
+  json: false
 };
 
 console.log("Start sample of Async Log...");
@@ -59,7 +60,47 @@ log.info("Message to log %s", 'with args');
 log.warn("Message to log %s", 'with args');
 log.error("Message to log %s", 'with args');
 
-console.log("End sample...");
+console.log("End sample... Yes, you see this first because the log write is set to next process instruction. :D");
+
+process.nextTick(function(){
+  console.log("Start sample of Async Log and delay execution...");
+  log.info("Message to log %s", 'with args');
+  process.nextTick(function(){
+    console.log("End sample of delayed execution!");
+  });
+});
+```
+Download the code from this [gist](https://gist.github.com/pjanuario/c5889fc5f9160fab0d0b).
+
+Set up plugins and log in a json format
+
+```javascript
+var Logger = require('logger-facade-nodejs');
+var LoggerConsolePlugin = require('logger-facade-console-plugin-nodejs');
+
+// this is the default config
+var config = {
+  level: 'debug',
+  timeFormat: 'YYYY-MM-DD HH:mm:ss',
+  messageFormat: '%time | %logger::%level - %msg',
+  json: true
+};
+
+console.log("Start sample of Async Log IN JSON...");
+
+var plugin = new LoggerConsolePlugin(config);
+Logger.use(plugin);
+
+console.log("Plugins: ", Logger.plugins());
+
+var log = Logger.getLogger("Name");
+log.trace("Message to log %s and should be hide", 'with args');
+log.debug("Message to log %s", 'with args');
+log.info("Message to log %s", 'with args');
+log.warn("Message to log %s", 'with args');
+log.error("Message to log %s", 'with args');
+
+console.log("End sample... Yes, you see this first because the log write is set to next process instruction. :D");
 
 process.nextTick(function(){
   console.log("Start sample of Async Log and delay execution...");
@@ -70,7 +111,7 @@ process.nextTick(function(){
 });
 ```
 
-Download the code from this [gist](https://gist.github.com/pjanuario/c5889fc5f9160fab0d0b).
+Download the code from this [gist](https://gist.github.com/pjanuario/238a8b0819cf390779f2).
 
 # Contributing
 Bug fixes and new features are of course very welcome!
