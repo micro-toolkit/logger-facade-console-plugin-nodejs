@@ -17,7 +17,8 @@ function text(messageFormat, data){
     .replace('%time',   data.timestamp)
     .replace('%level',  data.level)
     .replace('%pid',    data.pid)
-    .replace('%msg',    data.message);
+    .replace('%msg',    data.message)
+    .replace('%metadata', JSON.stringify(data.metadata));
 
   return formatedMessage;
 }
@@ -28,18 +29,21 @@ function log(config, activeLevel, level, args){
     args = _.toArray(args);
 
     var logger = args.shift();
+    var metadata = args.shift();
     var msg = args.shift();
 
-    args.unshift(output(msg));
-    var message = util.format.apply(null, args);
+    var message = null;
+    if (msg) {
+      args.unshift(output(msg));
+      message = util.format.apply(null, args);
+    }
 
-    // TODO: #xx hack
-    var pid = parseInt('%pid'.replace('%pid', process.pid), 10);
     var data = {
       timestamp:  timestamp(config.timeFormat),
       logger:     logger.toUpperCase(),
       level:      level.toUpperCase(),
-      pid:        pid,
+      pid:        process.pid,
+      metadata:   metadata,
       message:    message
     };
 
