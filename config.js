@@ -4,7 +4,8 @@ var defaults = {
   level: 'debug',
   timeFormat: 'YYYY-MM-DD HH:mm:ss',
   messageFormat: '%time | %logger::%level | PID: %pid - %msg',
-  json: false
+  json: false,
+  prettyPrint: false
 };
 
 function getConfig(configuration){

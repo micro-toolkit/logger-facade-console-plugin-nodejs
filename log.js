@@ -23,6 +23,13 @@ function text(messageFormat, data){
   return formatedMessage;
 }
 
+function pretify(shouldPretify) {
+  if (shouldPretify) {
+    return 2;
+  }
+  return null;
+}
+
 function log(config, activeLevel, level, args){
 
   if (isLevelActive(level, activeLevel)) {
@@ -46,8 +53,8 @@ function log(config, activeLevel, level, args){
       metadata:   metadata,
       message:    message
     };
-
-    var logText = config.json ? JSON.stringify(data)
+    
+    var logText = config.json ? JSON.stringify(data, null, pretify(config.prettyPrint))
       : text(config.messageFormat, data);
     console.log(logText);
   }
