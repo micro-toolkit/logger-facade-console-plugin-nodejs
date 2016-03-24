@@ -22,6 +22,7 @@ The plugin receives a config file with:
  * %level - message level
  * %pid - process id
  * %msg - message to log
+ * %metadata - additional metadata to log
 
 # How to use it
 
@@ -32,7 +33,9 @@ npm install logger-facade-nodejs
 npm install logger-facade-console-plugin-nodejs
 ```
 
-Set up plugins and log in a human readable format
+## Set up plugins and log in a human readable format
+
+If you use metadata, to improve readability you may want to use `prettyPrint: true`.
 
 ```javascript
 var Logger = require('logger-facade-nodejs');
@@ -43,7 +46,8 @@ var config = {
   level: 'debug',
   timeFormat: 'YYYY-MM-DD HH:mm:ss',
   messageFormat: '%time | %logger::%level - %msg',
-  json: false
+  json: false,
+  prettyPrint: false
 };
 
 console.log("Start sample of Async Log...");
@@ -55,10 +59,15 @@ console.log("Plugins: ", Logger.plugins());
 
 var log = Logger.getLogger("Name");
 log.trace("Message to log %s and should be hide", 'with args');
+log.trace({someinfo: true}, "Message to log %s and should be hide", 'with args');
 log.debug("Message to log %s", 'with args');
+log.debug({someinfo: true}, "Message to log %s", 'with args');
 log.info("Message to log %s", 'with args');
+log.info({someinfo: true}, "Message to log %s", 'with args');
 log.warn("Message to log %s", 'with args');
+log.warn({someinfo: true}, "Message to log %s", 'with args');
 log.error("Message to log %s", 'with args');
+log.error({someinfo: true}, "Message to log %s", 'with args');
 
 console.log("End sample... Yes, you see this first because the log write is set to next process instruction. :D");
 
@@ -72,7 +81,7 @@ process.nextTick(function(){
 ```
 Download the code from this [gist](https://gist.github.com/pjanuario/c5889fc5f9160fab0d0b).
 
-Set up plugins and log in a json format
+# Set up plugins and log in a json format
 
 ```javascript
 var Logger = require('logger-facade-nodejs');
@@ -83,7 +92,8 @@ var config = {
   level: 'debug',
   timeFormat: 'YYYY-MM-DD HH:mm:ss',
   messageFormat: '%time | %logger::%level - %msg',
-  json: true
+  json: true,
+  prettyPrint: false
 };
 
 console.log("Start sample of Async Log IN JSON...");
@@ -110,6 +120,10 @@ process.nextTick(function(){
   });
 });
 ```
+
+## Pretty print option
+
+The pretty print option is used to ouput metadata in a json pretty print format.
 
 Download the code from this [gist](https://gist.github.com/pjanuario/238a8b0819cf390779f2).
 
