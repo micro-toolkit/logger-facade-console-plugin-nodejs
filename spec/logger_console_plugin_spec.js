@@ -12,13 +12,13 @@ describe('Logger Console Plugin', function(){
       return moment("20140627 01:02:03", "YYYYMMDD HH:mm:ss");
     });
     spyOn(console, 'log').andReturn(Function.apply());
-    spyOn(process, 'pid').andReturn(100);
 
     defaultData = {
       timestamp:  '2014-06-27 01:02:03',
       logger:     'NAME',
       level:      null,
-      pid:        100,
+      pid:        process.pid,
+      metadata:   null,
       message:    null
     };
     defaultMessage = util.format('%s | %s::%s | PID: %s - ',
@@ -105,7 +105,7 @@ describe('Logger Console Plugin', function(){
 
     it('does not output when level is higher', function(){
       plugin.level = 'error';
-      plugin.trace('name', "LOG MESSAGE");
+      plugin.trace('name', null, "LOG MESSAGE");
       expect(console.log).not.toHaveBeenCalled();
     });
 
@@ -117,7 +117,22 @@ describe('Logger Console Plugin', function(){
 
       it('outputs log into console.log', function(){
         defaultData.message = "LOG MESSAGE";
-        plugin.trace('name', "LOG MESSAGE");
+        plugin.trace('name', null, "LOG MESSAGE");
+        expect(console.log).toHaveBeenCalledWith(JSON.stringify(defaultData));
+      });
+
+      it('outputs metadata into console.log', function(){
+        var metadata = { header: 'test' };
+        defaultData.metadata = metadata;
+        plugin.trace('name', metadata);
+        expect(console.log).toHaveBeenCalledWith(JSON.stringify(defaultData));
+      });
+
+      it('outputs metadata and log into console.log', function() {
+        var metadata = { header: 'test' };
+        defaultData.metadata = metadata;
+        defaultData.message = 'LOG MESSAGE';
+        plugin.trace('name', metadata, 'LOG MESSAGE');
         expect(console.log).toHaveBeenCalledWith(JSON.stringify(defaultData));
       });
 
@@ -125,13 +140,31 @@ describe('Logger Console Plugin', function(){
         var error = new Error("error");
         error.stack = "stack";
         defaultData.message = error.stack;
-        plugin.trace('name', error);
+        plugin.trace('name', null, error);
         expect(console.log).toHaveBeenCalledWith(JSON.stringify(defaultData));
       });
 
       it('outputs log into console.log with args', function(){
         defaultData.message = "LOG MESSAGE 1";
-        plugin.trace('name', "LOG MESSAGE %s", 1);
+        plugin.trace('name', null, "LOG MESSAGE %s", 1);
+        expect(console.log).toHaveBeenCalledWith(JSON.stringify(defaultData));
+      });
+
+      it('outputs metadata and error into console.log', function(){
+        var metadata = { header: 'test' };
+        var error = new Error("error");
+        error.stack = "stack";
+        defaultData.message = error.stack;
+        defaultData.metadata = metadata;
+        plugin.trace('name', metadata, error);
+        expect(console.log).toHaveBeenCalledWith(JSON.stringify(defaultData));
+      });
+
+      it('outputs metadata and log into console.log with args', function(){
+        var metadata = { header: 'test' };
+        defaultData.message = "LOG MESSAGE 1";
+        defaultData.metadata = metadata;
+        plugin.trace('name', metadata, "LOG MESSAGE %s", 1);
         expect(console.log).toHaveBeenCalledWith(JSON.stringify(defaultData));
       });
     });
@@ -142,19 +175,42 @@ describe('Logger Console Plugin', function(){
       });
 
       it('outputs log into console.log', function(){
-        plugin.trace('name', "LOG MESSAGE");
+        plugin.trace('name', null, "LOG MESSAGE");
+        expect(console.log).toHaveBeenCalledWith(defaultMessage + "LOG MESSAGE");
+      });
+
+      it('outputs metadata and log into console.log', function(){
+        var metadata = { header: 'test' };
+        defaultData.metadata = metadata;
+        plugin.trace('name', metadata, "LOG MESSAGE");
         expect(console.log).toHaveBeenCalledWith(defaultMessage + "LOG MESSAGE");
       });
 
       it('outputs error into console.log', function(){
         var error = new Error("error");
         error.stack = "stack";
-        plugin.trace('name', error);
+        plugin.trace('name', null, error);
+        expect(console.log).toHaveBeenCalledWith(defaultMessage + error.stack);
+      });
+
+      it('outputs metadata and error into console.log', function(){
+        var error = new Error("error");
+        var metadata = { header: 'test' };
+        defaultData.metadata = metadata;
+        error.stack = "stack";
+        plugin.trace('name', metadata, error);
         expect(console.log).toHaveBeenCalledWith(defaultMessage + error.stack);
       });
 
       it('outputs log into console.log with args', function(){
-        plugin.trace('name', "LOG MESSAGE %s", 1);
+        plugin.trace('name', null, "LOG MESSAGE %s", 1);
+        expect(console.log).toHaveBeenCalledWith(defaultMessage + "LOG MESSAGE 1");
+      });
+
+      it('outputs metadata and log into console.log with args', function(){
+        var metadata = { header: 'test' };
+        defaultData.metadata = metadata;
+        plugin.trace('name', metadata, "LOG MESSAGE %s", 1);
         expect(console.log).toHaveBeenCalledWith(defaultMessage + "LOG MESSAGE 1");
       });
     });
@@ -170,24 +226,24 @@ describe('Logger Console Plugin', function(){
 
     it('does not output when level is higher', function(){
       plugin.level = 'error';
-      plugin.debug('name', "LOG MESSAGE");
+      plugin.debug('name', null, "LOG MESSAGE");
       expect(console.log).not.toHaveBeenCalled();
     });
 
     it('outputs log into console.log', function(){
-      plugin.debug('name', "LOG MESSAGE");
+      plugin.debug('name', null, "LOG MESSAGE");
       expect(console.log).toHaveBeenCalledWith(defaultMessage + "LOG MESSAGE");
     });
 
     it('outputs error into console.log', function(){
       var error = new Error("error");
       error.stack = "stack";
-      plugin.debug('name', error);
+      plugin.debug('name', null, error);
       expect(console.log).toHaveBeenCalledWith(defaultMessage + error.stack);
     });
 
     it('outputs log into console.log with args', function(){
-      plugin.debug('name', "LOG MESSAGE %s", 1);
+      plugin.debug('name', null, "LOG MESSAGE %s", 1);
       expect(console.log).toHaveBeenCalledWith(defaultMessage + "LOG MESSAGE 1");
     });
 
@@ -202,24 +258,24 @@ describe('Logger Console Plugin', function(){
 
     it('does not output when level is higher', function(){
       plugin.level = 'error';
-      plugin.info('name', "LOG MESSAGE");
+      plugin.info('name', null, "LOG MESSAGE");
       expect(console.log).not.toHaveBeenCalled();
     });
 
     it('outputs log into console.log', function(){
-      plugin.info('name', "LOG MESSAGE");
+      plugin.info('name', null, "LOG MESSAGE");
       expect(console.log).toHaveBeenCalledWith(defaultMessage + "LOG MESSAGE");
     });
 
     it('outputs error into console.log', function(){
       var error = new Error("error");
       error.stack = "stack";
-      plugin.info('name', error);
+      plugin.info('name', null, error);
       expect(console.log).toHaveBeenCalledWith(defaultMessage + error.stack);
     });
 
     it('outputs log into console.log with args', function(){
-      plugin.info('name', "LOG MESSAGE %s", 1);
+      plugin.info('name', null, "LOG MESSAGE %s", 1);
       expect(console.log).toHaveBeenCalledWith(defaultMessage + "LOG MESSAGE 1");
     });
 
@@ -234,24 +290,24 @@ describe('Logger Console Plugin', function(){
 
     it('does not output when level is higher', function(){
       plugin.level = 'error';
-      plugin.warn('name', "LOG MESSAGE");
+      plugin.warn('name', null, "LOG MESSAGE");
       expect(console.log).not.toHaveBeenCalled();
     });
 
     it('outputs log into console.log', function(){
-      plugin.warn('name', "LOG MESSAGE");
+      plugin.warn('name', null, "LOG MESSAGE");
       expect(console.log).toHaveBeenCalledWith(defaultMessage + "LOG MESSAGE");
     });
 
     it('outputs error into console.log', function(){
       var error = new Error("error");
       error.stack = "stack";
-      plugin.warn('name', error);
+      plugin.warn('name', null, error);
       expect(console.log).toHaveBeenCalledWith(defaultMessage + error.stack);
     });
 
     it('outputs log into console.log with args', function(){
-      plugin.warn('name', "LOG MESSAGE %s", 1);
+      plugin.warn('name', null, "LOG MESSAGE %s", 1);
       expect(console.log).toHaveBeenCalledWith(defaultMessage + "LOG MESSAGE 1");
     });
 
@@ -265,19 +321,19 @@ describe('Logger Console Plugin', function(){
     });
 
     it('outputs log into console.log', function(){
-      plugin.error('name', "LOG MESSAGE");
+      plugin.error('name', null, "LOG MESSAGE");
       expect(console.log).toHaveBeenCalledWith(defaultMessage + "LOG MESSAGE");
     });
 
     it('outputs error into console.log', function(){
       var error = new Error("error");
       error.stack = "stack";
-      plugin.error('name', error);
+      plugin.error('name', null, error);
       expect(console.log).toHaveBeenCalledWith(defaultMessage + error.stack);
     });
 
     it('outputs log into console.log with args', function(){
-      plugin.error('name', "LOG MESSAGE %s", 1);
+      plugin.error('name', null, "LOG MESSAGE %s", 1);
       expect(console.log).toHaveBeenCalledWith(defaultMessage + "LOG MESSAGE 1");
     });
 
