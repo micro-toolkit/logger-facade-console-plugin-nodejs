@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/micro-toolkit/logger-facade-console-plugin-nodejs.svg?branch=master)](https://travis-ci.org/micro-toolkit/logger-facade-console-plugin-nodejs)
-[![Code Climate](https://codeclimate.com/github/pjanuario/logger-facade-console-plugin-nodejs.png)](https://codeclimate.com/github/pjanuario/logger-facade-console-plugin-nodejs)
-[![Coverage](http://img.shields.io/codeclimate/coverage/github/pjanuario/logger-facade-console-plugin-nodejs.svg)](https://codeclimate.com/github/pjanuario/logger-facade-console-plugin-nodejs)
-[![Dependency Status](https://gemnasium.com/pjanuario/logger-facade-console-plugin-nodejs.svg)](https://gemnasium.com/pjanuario/logger-facade-console-plugin-nodejs)
+[![Code Climate](https://codeclimate.com/github/micro-toolkit/logger-facade-console-plugin-nodejs.png)](https://codeclimate.com/github/micro-toolkit/logger-facade-console-plugin-nodejs)
+[![Coverage](http://img.shields.io/codeclimate/coverage/github/micro-toolkit/logger-facade-console-plugin-nodejs.svg)](https://codeclimate.com/github/micro-toolkit/logger-facade-console-plugin-nodejs)
+[![Dependency Status](https://gemnasium.com/micro-toolkit/logger-facade-console-plugin-nodejs.svg)](https://gemnasium.com/micro-toolkit/logger-facade-console-plugin-nodejs)
 ![Grunt](https://cdn.gruntjs.com/builtwith.png)
 
 # Logger Facade Console plugin for Nodejs
