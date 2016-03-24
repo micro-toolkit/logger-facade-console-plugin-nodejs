@@ -58,8 +58,8 @@ Logger.use(plugin);
 console.log("Plugins: ", Logger.plugins());
 
 var log = Logger.getLogger("Name");
-log.trace("Message to log %s and should be hide", 'with args');
-log.trace({someinfo: true}, "Message to log %s and should be hide", 'with args');
+log.trace("Message to log %s and should be hidden due to log level", 'with args');
+log.trace({someinfo: true}, "Message to log %s and should be hidden due to log level", 'with args');
 log.debug("Message to log %s", 'with args');
 log.debug({someinfo: true}, "Message to log %s", 'with args');
 log.info("Message to log %s", 'with args');
@@ -104,7 +104,7 @@ Logger.use(plugin);
 console.log("Plugins: ", Logger.plugins());
 
 var log = Logger.getLogger("Name");
-log.trace("Message to log %s and should be hide", 'with args');
+log.trace("Message to log %s and should be hidden due to log level", 'with args');
 log.debug("Message to log %s", 'with args');
 log.info("Message to log %s", 'with args');
 log.warn("Message to log %s", 'with args');
