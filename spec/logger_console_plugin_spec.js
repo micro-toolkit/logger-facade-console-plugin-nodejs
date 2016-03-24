@@ -35,7 +35,8 @@ describe('Logger Console Plugin', function(){
           level: 'debug',
           timeFormat: 'YYYY-MM-DD HH:mm:ss',
           messageFormat: '%time | %logger::%level | PID: %pid - %msg',
-          json: false
+          json: false,
+          prettyPrint: false
         });
       });
 
@@ -45,7 +46,8 @@ describe('Logger Console Plugin', function(){
           level: 'debug',
           timeFormat: 'YYYY-MM-DD HH:mm:ss',
           messageFormat: '%time | %logger::%level | PID: %pid - %msg',
-          json: false
+          json: false,
+          prettyPrint: false
         });
       });
 
@@ -59,7 +61,8 @@ describe('Logger Console Plugin', function(){
           level: 'info',
           timeFormat: 'YYYY-MM-DD HH:mm:ss',
           messageFormat: '%time | %logger::%level | PID: %pid - %msg',
-          json: false
+          json: false,
+          prettyPrint: false
         });
       });
 
@@ -68,7 +71,8 @@ describe('Logger Console Plugin', function(){
           level: 'error',
           timeFormat: 'moment format',
           messageFormat: 'message format',
-          json: true
+          json: true,
+          prettyPrint: true
         };
         plugin = new LoggerConsolePlugin(config);
         expect(plugin.config).toEqual(config);
@@ -165,7 +169,16 @@ describe('Logger Console Plugin', function(){
         defaultData.message = "LOG MESSAGE 1";
         defaultData.metadata = metadata;
         plugin.trace('name', metadata, "LOG MESSAGE %s", 1);
-        expect(console.log).toHaveBeenCalledWith(JSON.stringify(defaultData));
+
+      });
+
+      it('pretty prints', function(){
+        var metadata = { header: 'test' };
+        plugin.config.prettyPrint = true;
+        defaultData.message = "LOG MESSAGE 1";
+        defaultData.metadata = metadata;
+        plugin.trace('name', metadata, "LOG MESSAGE %s", 1);
+        expect(console.log).toHaveBeenCalledWith(JSON.stringify(defaultData, null, 2));
       });
     });
 
@@ -212,6 +225,16 @@ describe('Logger Console Plugin', function(){
         defaultData.metadata = metadata;
         plugin.trace('name', metadata, "LOG MESSAGE %s", 1);
         expect(console.log).toHaveBeenCalledWith(defaultMessage + "LOG MESSAGE 1");
+      });
+
+      it('pretty prints', function(){
+        var metadata = { header: 'test' };
+        plugin.config.prettyPrint = true;
+        plugin.config.messageFormat = '%time | %logger::%level | PID: %pid - %msg | %metadata';
+        defaultData.message = "LOG MESSAGE 1";
+        defaultData.metadata = metadata;
+        plugin.trace('name', metadata, "LOG MESSAGE %s", 1);
+        expect(console.log).toHaveBeenCalledWith(defaultMessage + "LOG MESSAGE 1 | " + JSON.stringify(metadata, null, 2));
       });
     });
 

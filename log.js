@@ -11,16 +11,23 @@ function output(msg){
   return msg instanceof Error ? msg.stack : msg;
 }
 
-function text(messageFormat, data){
+function text(messageFormat, data, shouldPretify){
   var formatedMessage = messageFormat
     .replace('%logger', data.logger)
     .replace('%time',   data.timestamp)
     .replace('%level',  data.level)
     .replace('%pid',    data.pid)
     .replace('%msg',    data.message)
-    .replace('%metadata', JSON.stringify(data.metadata));
+    .replace('%metadata', JSON.stringify(data.metadata, null, shouldPretify));
 
   return formatedMessage;
+}
+
+function pretify(shouldPretify) {
+  if (shouldPretify) {
+    return 2;
+  }
+  return null;
 }
 
 function log(config, activeLevel, level, args){
@@ -47,8 +54,12 @@ function log(config, activeLevel, level, args){
       message:    message
     };
 
-    var logText = config.json ? JSON.stringify(data)
-      : text(config.messageFormat, data);
+    var logText = '';
+    if (config.json) {
+      logText = JSON.stringify(data, null, pretify(config.prettyPrint));
+    } else {
+      logText = text(config.messageFormat, data, pretify(config.prettyPrint))
+    }
     console.log(logText);
   }
 
