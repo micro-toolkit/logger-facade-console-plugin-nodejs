@@ -226,6 +226,16 @@ describe('Logger Console Plugin', function(){
         plugin.trace('name', metadata, "LOG MESSAGE %s", 1);
         expect(console.log).toHaveBeenCalledWith(defaultMessage + "LOG MESSAGE 1");
       });
+
+      it('pretty prints', function(){
+        var metadata = { header: 'test' };
+        plugin.config.prettyPrint = true;
+        plugin.config.messageFormat = '%time | %logger::%level | PID: %pid - %msg | %metadata';
+        defaultData.message = "LOG MESSAGE 1";
+        defaultData.metadata = metadata;
+        plugin.trace('name', metadata, "LOG MESSAGE %s", 1);
+        expect(console.log).toHaveBeenCalledWith(defaultMessage + "LOG MESSAGE 1 | " + JSON.stringify(metadata, null, 2));
+      });
     });
 
   });
