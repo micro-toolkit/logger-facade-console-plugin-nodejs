@@ -3,10 +3,6 @@ var _ = require('lodash'),
     util = require('util'),
     isLevelActive = require('./level');
 
-function timestamp(timeFormat){
-  return moment.utc().format(timeFormat);
-}
-
 function output(msg){
   return msg instanceof Error ? msg.stack : msg;
 }
@@ -35,6 +31,7 @@ function log(config, activeLevel, level, args){
   if (isLevelActive(level, activeLevel)) {
     args = _.toArray(args);
 
+    var timestamp = args.shift();
     var logger = args.shift();
     var metadata = args.shift();
     var msg = args.shift();
@@ -46,7 +43,7 @@ function log(config, activeLevel, level, args){
     }
 
     var data = {
-      timestamp:  timestamp(config.timeFormat),
+      timestamp:  moment(timestamp).utc().format(config.timeFormat),
       logger:     logger.toUpperCase(),
       level:      level.toUpperCase(),
       pid:        process.pid,
